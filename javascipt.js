@@ -1,22 +1,11 @@
+let humanScore = 0;
+let computerScore = 0;
+
 function getComputerChoice() {
-  const computer_Choice = Math.floor(Math.random() * 3);
+  const random = Math.floor(Math.random() * 3);
 
-  if (computer_Choice === 0) {
-    return "rock";
-  } else if (computer_Choice === 1) {
-    return "paper";
-  } else {
-    return "scissors";
-  }
+  return ["rock", "paper", "scissors"][random];
 }
-//console.log(getComputerChoice());
-
-function getHumanChoice() {
-  let choice = prompt("Please enter your input;");
-
-  return choice.toLowerCase();
-}
-//console.log(getHumanChoice());
 
 function playRound(humanChoice, computerChoice) {
   if (humanChoice === computerChoice) {
@@ -26,29 +15,26 @@ function playRound(humanChoice, computerChoice) {
     (humanChoice === "paper" && computerChoice === "scissors") ||
     (humanChoice === "rock" && computerChoice === "paper")
   ) {
-    console.log("You lose! " + computerChoice + " beats " + humanChoice);
     computerScore++;
+    return `You lose!  ${computerChoice}  beats  ${humanChoice}`;
   } else {
-    console.log("You win! " + humanChoice + " beats " + computerChoice);
     humanScore++;
+    return `You win!   ${humanChoice}   beats ${computerChoice}`;
   }
 }
-let humanScore = 0;
-let computerScore = 0;
 
-function playGame() {
-  for (let i = 1; i <= 5; i++) {
-    const humanSelection = getHumanChoice();
-    const computerSelection = getComputerChoice();
+const btn = document.querySelectorAll("button");
 
-    console.log(`Round ${i}`);
-    playRound(humanSelection, computerSelection);
-  }
+btn.forEach((button) => {
+  button.addEventListener("click", () => {
+    const humanChoice = button.dataset.choice;
+    const computerChoice = getComputerChoice();
 
-  if (humanScore > computerScore) {
-    console.log("You won the game");
-  } else {
-    console.log("You lost the game");
-  }
-}
-playGame();
+    const result = playRound(humanChoice, computerChoice);
+
+    document.getElementById("result").textContent = result;
+    document.getElementById(
+      "score"
+    ).textContent = `Human: ${humanScore} | Computer: ${computerScore}`;
+  });
+});
